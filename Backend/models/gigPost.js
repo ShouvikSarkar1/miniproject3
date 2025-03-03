@@ -26,18 +26,6 @@ const gigSchema = new Schema({
         ref: 'User',
         required: true,
     },
-    comments: [
-        {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' },
-        text: { type: String, required: true},
-    }
-],
-    likes: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Like',
-        }
-    ],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Gig', gigSchema);

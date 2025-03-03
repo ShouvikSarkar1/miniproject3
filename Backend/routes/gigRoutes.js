@@ -2,6 +2,7 @@ let express = require('express');
 let router = express.Router();
 let Controllers = require('../controllers');
 
+// Gig Post Routes
 router.get('/', (req, res) => {
     Controllers.gigController.getGigs(res);
 });
@@ -10,12 +11,12 @@ router.post('/postGig', (req, res) => {
     Controllers.gigController.postGig(req.body, res);
 });
 
-router.put('/:id/like', (req, res) => {
-    Controllers.gigController.likePost(req.params.id. req.bodyuserId, res)
+router.put('/:id', (req, res) => {
+    Controllers.gigController.updateGig(req, res);
 });
 
-router.post('/:id/comment', (req, res) => {
-    Controllers.gigController.addComment(req.params.id, req.body, res);
-})
+router.delete('/:id', (req, res) => {
+    Controllers.gigController.deleteGig(req, res);
+});
 
 module.exports = router;
