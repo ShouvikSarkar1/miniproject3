@@ -8,59 +8,79 @@ export default function SignupForm() {
     handleSubmit,
     watch,
     reset,
+    setValue, 
     formState: { errors },
   } = useForm();
 
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const password = watch('password');
 
   const onSubmit = async (data) => {
+    const formattedData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      emailId: data.emailId, 
+      password: data.password,
+      businessName: data.businessName,
+      location: data.location,
+      role: data.role,
+    };
+
     try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+      const response = await fetch('http://localhost:5000/api/users/create', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formattedData),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error('Sign up failed');
+        throw new Error(result.message || 'Sign-up failed');
       }
 
-      await response.json();
       setSuccessMessage('Signup successful!');
+      setErrorMessage('');
       reset();
     } catch (error) {
-      console.error('Error:', error);
+      setErrorMessage(error.message);
     }
   };
 
-  const password = watch('password');
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <Card sx={{ maxWidth: 700, p: 3 , textAlign: 'center', border: '2px solid #ff7b00'}}>
-              <Typography variant="h4" component="h1" gutterBottom>
-                Sign Up
-              </Typography>
+      <Card sx={{ maxWidth: 700, p: 3, textAlign: 'center', border: '2px solid #ff7b00' }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Sign Up
+        </Typography>
         <CardContent>
           {successMessage && <Alert severity="success">{successMessage}</Alert>}
+          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
             <TextField
               fullWidth
-              label="Full Name"
-              {...register('fullName', { required: 'Full name is required' })}
-              error={!!errors.fullName}
-              helperText={errors.fullName?.message}
+              label="First Name"
+              {...register('firstName', { required: 'First name is required' })}
+              error={!!errors.firstName}
+              helperText={errors.firstName?.message}
+              margin="dense"
+            />
+            <TextField
+              fullWidth
+              label="Last Name"
+              {...register('lastName', { required: 'Last name is required' })}
+              error={!!errors.lastName}
+              helperText={errors.lastName?.message}
               margin="dense"
             />
             <TextField
               fullWidth
               label="Email"
               type="email"
-              {...register('email', { required: 'Email is required' })}
-              error={!!errors.email}
-              helperText={errors.email?.message}
+              {...register('emailId', { required: 'Email is required' })}
+              error={!!errors.emailId}
+              helperText={errors.emailId?.message}
               margin="dense"
             />
             <TextField
@@ -105,13 +125,19 @@ export default function SignupForm() {
             />
             <FormControl fullWidth margin="dense">
               <InputLabel>Role</InputLabel>
-              <Select {...register('role', { required: 'Role is required' })} defaultValue="">
+              <Select
+                defaultValue=""
+                {...register('role', { required: 'Role is required' })}
+                onChange={(e) => setValue('role', e.target.value)}
+                error={!!errors.role}
+              >
                 <MenuItem value="venue">Venue</MenuItem>
                 <MenuItem value="artist">Artist</MenuItem>
                 <MenuItem value="promoter">Promoter</MenuItem>
               </Select>
+              {errors.role && <Typography color="error">{errors.role.message}</Typography>}
             </FormControl>
-            <Button type="submit" variant="contained" fullWidth sx={{mt:2, backgroundColor: '#ff7b00'}}>
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2, backgroundColor: '#ff7b00' }}>
               Sign Up
             </Button>
           </form>

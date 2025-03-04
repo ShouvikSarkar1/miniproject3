@@ -8,7 +8,7 @@ const gigSchema = new Schema({
         required: true,
     },
     gigDate: {
-        type: String,
+        type: Date,
         required: true,
     },
     gigDescription: {

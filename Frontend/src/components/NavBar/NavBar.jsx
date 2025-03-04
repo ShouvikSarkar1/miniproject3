@@ -15,7 +15,8 @@ const NavBar = () => {
               !currentUser.email? ( 
               <li><NavLink to ='/login'>Log In</NavLink></li>
             ) :( <>
-              <li><NavLink to ='/dash'>Dashboard</NavLink></li>       
+              <li><NavLink to ='/dash'>Dashboard</NavLink></li> 
+              <li><NavLink to='/events'>Events</NavLink></li>      
               <li><Logout/></li>
               </>
             )

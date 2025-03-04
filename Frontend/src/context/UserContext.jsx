@@ -8,6 +8,8 @@ export const UserProvider = ({ children }) => {
     profilePicture: "https://via.placeholder.com/100", // Default profile pic
   });
 
+  
+
   const handleUpdateUser = (userData) => {
     setCurrentUser((prev) => ({ ...prev, ...userData }));
   };

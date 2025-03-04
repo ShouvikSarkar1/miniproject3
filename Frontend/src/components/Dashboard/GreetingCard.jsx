@@ -1,11 +1,12 @@
 import { Card, CardContent, Typography, Avatar } from "@mui/material";
+import { useUserContext } from "../../context/UserContext";
+
 
 export default function GreetingCard({ userName, profilePicture }) {
     // Extract username from email
-    const displayName = userName.includes("@") ? userName.split("@")[0] : userName;
-  
+    const displayName = userName.includes("@") ? userName.split("@")[0] : userNa
     return (
-      <Card sx={{ maxWidth: 400, p: 2, textAlign: "center", boxShadow: 3, border: "2px solid #ff7b00" }}>
+      <Card sx={{ minWidth: 290, p: 2, textAlign: "center", boxShadow: 3, border: "2px solid #ff7b00" }}>
         <CardContent>
           <Avatar 
             src={profilePicture} 

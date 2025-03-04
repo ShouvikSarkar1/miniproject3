@@ -9,6 +9,7 @@ const Logout = () => {
     const handleLogout = (e) => {
         e.preventDefault();
         handleUpdateUser({});
+        window.location.reload();
         navigate('/login');
     };
     if(!currentUser.email){

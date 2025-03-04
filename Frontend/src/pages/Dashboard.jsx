@@ -21,8 +21,8 @@ const Dashboard = () => {
         <div className="greeting-search-section">
         <div className='greeting'>
           {/* Display Greeting */}
-            {currentUser?.email ? (
-            <GreetingCard userName={currentUser.email} />
+            {currentUser ? (
+            <GreetingCard userName={currentUser.firstName || currentUser.email} />
           ) : (
           <p>Loading user data...</p>
         )}

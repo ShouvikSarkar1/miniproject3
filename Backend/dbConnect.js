@@ -2,7 +2,7 @@
 const Mongoose = require('mongoose');
 require('dotenv').config();
 
-const uri = process.env.DB_URI || "mongodb://localhost/GigFinder";
+const uri = process.env.DB_URI || "mongodb://localhost:27017/GigFinder";
 
 Mongoose.connect(uri)
     .then(() => console.log('MongoDB Connected'))

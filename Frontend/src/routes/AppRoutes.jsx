@@ -5,6 +5,7 @@ import SignUp from '../pages/SignUp'
 import Dashboard from '../pages/Dashboard'
 import MUIForm from '../components/LoginForm/MUIForm'
 import PageNotFound from '../pages/PageNotFound'
+import Events from '../pages/Events'
 import ProtectedRoutes from './ProtectedRoutes'
 
 const AppRoutes = (props) => {
@@ -15,6 +16,7 @@ const AppRoutes = (props) => {
         <Route path='/login' element={<MUIForm/>}/>
         <Route path='/*' element={<PageNotFound {...props}/>}/>
         <Route path='/dash' element ={<ProtectedRoutes><Dashboard {...props}/></ProtectedRoutes>}/>
+        <Route path='/events' element={<ProtectedRoutes><Events {...props}/></ProtectedRoutes>}/>
     </Routes>
   )
 }

@@ -14,6 +14,7 @@ const getGigs = (res) => {
 };
 
 const postGig = (data, res) => {
+    console.log("Received Data:", data); // Check what data is coming in
     new Models.Gig(data)
         .save()
         .then((data) => res.send({ result: 200, data: data }))
