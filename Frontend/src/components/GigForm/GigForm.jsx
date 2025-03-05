@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { TextField, Box, Button, Typography, Alert } from "@mui/material";
 
-const GigForm = () => {
+const GigForm = ({ onGigAdded }) => {  // Accept onGigAdded as prop
   const [formData, setFormData] = useState({
     gigTitle: "",
     gigDate: "",
@@ -33,6 +33,10 @@ const GigForm = () => {
 
       const data = await response.json();
       console.log("Gig created:", formData);
+
+      // Call the callback function passed from parent to update the gig list
+      onGigAdded(data.data);  // Pass the newly added gig to the parent component
+
       setSubmitResult("Gig posted successfully!");
 
       // Reset the form after successful submission
@@ -138,4 +142,5 @@ const GigForm = () => {
 };
 
 export default GigForm;
+
 

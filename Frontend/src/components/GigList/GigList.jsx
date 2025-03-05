@@ -1,88 +1,71 @@
-import { Card, CardContent, CardMedia, Typography, CardActionArea, Grid, Box, CircularProgress } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, Typography, Grid, Container } from "@mui/material";
 
-export default function GigList() {
-  const [gigs, setGigs] = React.useState([]);  // Store the fetched gigs data
-  const [loading, setLoading] = React.useState(true);  // For loading state
-  const [error, setError] = React.useState('');  // For handling errors
+const GigList = () => {
+  const [gigs, setGigs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch gigs from the backend
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchGigs = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/gigs');  // Replace with your API endpoint
+        console.log("Fetching gigs...");
+        const response = await fetch("http://localhost:5000/api/gigs/");
         if (!response.ok) {
-          throw new Error('Failed to fetch gigs');
+          throw new Error("Failed to fetch gigs");
         }
         const data = await response.json();
-        console.log('Fetched Gigs:', data);  // Debugging the fetched data
-        setGigs(data);  // Set the fetched gigs to state
-        setLoading(false);
+        console.log("Fetched data:", data); // Log data
+        
+        if (data.result === 200) {
+          setGigs(data.data); // Correctly setting the gigs array
+        } else {
+          throw new Error("No gigs found");
+        }
       } catch (err) {
-        setError(err.message);  // Set error message in case of failure
+        console.error("Fetch error:", err.message);
+        setError(err.message);
+      } finally {
         setLoading(false);
       }
     };
-
-    fetchGigs();  // Fetch the gigs when the component mounts
+  
+    fetchGigs();
   }, []);
+  
+  console.log("Gigs state:", gigs); // Log gigs state
 
-  // Loading state
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  // Error handling
-  if (error) {
-    return (
-      <Box sx={{ padding: 4 }}>
-        <Typography variant="h6" color="error">{`Error: ${error}`}</Typography>
-      </Box>
-    );
-  }
+  if (loading) return <p>Loading gigs...</p>;
+  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Typography variant="h4" gutterBottom>Gigs Available</Typography>
-      <Grid container spacing={4}>
-        {gigs.length > 0 ? (
-          gigs.map((gig) => (
+    <Container>
+      <h2>Gigs List</h2>
+      {gigs.length > 0 ? (
+        <Grid container spacing={3}>
+          {gigs.map((gig) => (
             <Grid item xs={12} sm={6} md={4} key={gig._id}>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardActionArea>
-                  {gig.image && (
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={gig.image}  // Image URL from the backend (replace with your actual image URL)
-                      alt={gig.gigTitle}
-                    />
-                  )}
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {gig.gigTitle}  {/* Gig Title */}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {new Date(gig.gigDate).toLocaleDateString()}  {/* Gig Date */}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {gig.gigDescription}  {/* Gig Description */}
-                    </Typography>
-                    <Typography variant="body2" color="primary">
-                      Location: {gig.location}  {/* Gig Location */}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="h6" component="div">
+                    {gig.gigTitle}
+                  </Typography>
+                  <Typography color="textSecondary" gutterBottom>
+                    {gig.gigDate} | {gig.location}
+                  </Typography>
+                  <Typography variant="body2">
+                    {gig.gigDescription}
+                  </Typography>
+                </CardContent>
               </Card>
             </Grid>
-          ))
-        ) : (
-          <Typography variant="h6">No gigs available</Typography>
-        )}
-      </Grid>
-    </Box>
+          ))}
+        </Grid>
+      ) : (
+        <p>No gigs available.</p>
+      )}
+    </Container>
   );
-}
+};
+
+export default GigList;
