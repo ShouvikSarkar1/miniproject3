@@ -8,7 +8,7 @@ const gigSchema = new Schema({
         required: true,
     },
     gigDate: {
-        type: Date,
+        type: String,
         required: true,
     },
     gigDescription: {
@@ -24,7 +24,7 @@ const gigSchema = new Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
-        required: true,
+        required: false,
     },
 }, { timestamps: true });
 

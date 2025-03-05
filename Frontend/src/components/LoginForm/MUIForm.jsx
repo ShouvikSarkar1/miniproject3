@@ -42,13 +42,15 @@ export default function MUIForm() {
           throw new Error(result.message || "Login failed");
         }
   
-        // If login is successful
+        // If login is successful, retrieve the user info (including business name)
+        const { email, businessName } = result;
+  
         setSubmitResult("Successful login.");
-        handleUpdateUser({ email: userEmail });  // Update context with user info
+        handleUpdateUser({ email: userEmail, businessName: businessName });  // Update context with user info
   
-        // Store user data in localStorage
-        localStorage.setItem("user", JSON.stringify({ email: userEmail }));
-  
+        // Store user data (email and business name) in localStorage
+        localStorage.setItem("user", JSON.stringify(result));
+        console.log(localStorage.getItem("user"));
         setIsLoggedIn(true);
       } catch (error) {
         setSubmitResult(error.message);
@@ -64,6 +66,7 @@ export default function MUIForm() {
           isLoggedIn ? (
             <>
               <Typography variant="h5" component="h2">{`Welcome ${userEmail}!`}</Typography>
+              <Typography variant="h6" sx={{ mt: 2 }}>Business Name: {JSON.parse(localStorage.getItem("user")).businessName}</Typography>
               <Alert severity="success" sx={{ mt: 2 }}>{submitResult}</Alert>
             </>
           ) : (

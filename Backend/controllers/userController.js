@@ -29,7 +29,8 @@ const loginUser = async (userData, res) => {
         if (!user || user.password !== password) {
             return res.status(400).json({ message: 'Invalid email or password'});
         }
-        res.json({ message: 'Login successful!', user: { id: user._id, emailId: user.emailId, role: user.role, name: user.firstName }})
+        res.json({ message: 'Login successful!', user: { id: user._id, emailId: user.emailId, role: user.role, name: user.firstName, businessName: user.businessName }})
+        console.log('User logged in');
     }catch (error) {
         res.status(500).json({ message: 'Server error '})
     }

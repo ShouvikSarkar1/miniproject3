@@ -7,24 +7,9 @@ const GigForm = () => {
     gigDate: "",
     gigDescription: "",
     location: "",
-    user: "", // User ID will be set later
-    username: "", // Store the username
   });
 
   const [submitResult, setSubmitResult] = useState(""); // For displaying the result of the submission
-
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    console.log("Stored User:", storedUser); // Debugging
-
-    if (storedUser && storedUser._id) {
-      setFormData((prevData) => ({
-        ...prevData,
-        user: storedUser._id, // Ensure user ID is set
-        username: storedUser.email || "Unknown User",
-      }));
-    }
-  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,12 +17,6 @@ const GigForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!formData.user) {
-      setSubmitResult("Error: User ID is missing. Please log in.");
-      console.error("Error: User ID is missing.");
-      return;
-    }
 
     try {
       const response = await fetch("http://localhost:5000/api/gigs/postGig", {
@@ -53,17 +32,15 @@ const GigForm = () => {
       }
 
       const data = await response.json();
-      console.log("Gig created:", data);
+      console.log("Gig created:", formData);
       setSubmitResult("Gig posted successfully!");
 
-      // Reset form after successful submission
+      // Reset the form after successful submission
       setFormData({
         gigTitle: "",
         gigDate: "",
         gigDescription: "",
         location: "",
-        user: formData.user, // Keep user ID after reset
-        username: formData.username,
       });
     } catch (error) {
       console.error("Error creating gig:", error);
@@ -156,14 +133,9 @@ const GigForm = () => {
           {submitResult}
         </Alert>
       )}
-
-      {formData.username && (
-        <Typography variant="body2" sx={{ mt: 2 }}>
-          {`Posted by: ${formData.username}`}
-        </Typography>
-      )}
     </Box>
   );
 };
 
 export default GigForm;
+
